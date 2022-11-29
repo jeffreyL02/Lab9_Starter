@@ -4,7 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "f6fb28dcc5854a10bd04060d146e78b1"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
   <title>Lab 9</title>
 
   <style>
@@ -88,20 +95,94 @@
   </main>
 
   <script>
+    class FormError extends Error {
+      constructor(message) {
+        super(message); // (1)
+        this.name = "FormError"; // (2)
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
+      let operator = document.querySelector('#operator').value;    
+      try {
+        if(parseInt(firstNum,10).toString()===firstNum
+            && parseInt(secondNum,10).toString()===secondNum) {
+              console.log("ok");
+        }
+        else{
+          throw new FormError("One or both arguments to the calculator is invalid");
+        }
+      }
+      catch(err) {
+        alert(err.message);
+      }
+      finally {
+        form.reset();
+      }
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', () => {
+      console.log("Console Log Demo");
+    });
+    errorBtns[1].addEventListener('click', () => {
+      console.error("Console Error Demo");
+    });
+    errorBtns[2].addEventListener('click', () => {
+      console.count("Count Button");
+    });
+    errorBtns[3].addEventListener('click', () => {
+      console.warn("Console Warn Button");
+    });
+    errorBtns[4].addEventListener('click', () => {
+      console.assert(2 == 3, {number: 2, errorMsg: "The number does not equal 3"});
+    });
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(document.head);
+    });
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(errorBtns[7]);
+    });
+    errorBtns[8].addEventListener('click', () => {
+      console.group("group");
+    });
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd();
+    });
+    errorBtns[10].addEventListener('click', () => {
+      console.table(["apples", "oranges", "bananas"]);
+    });
+    errorBtns[11].addEventListener('click', () => {
+      console.time();
+    });
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd();
+    });
+    errorBtns[13].addEventListener('click', () => {
+      trace();
+    });
+    errorBtns[14].addEventListener('click', () => {
+      console.log("Error:");
+      let error = boom;
+    });
+    function trace() {
+      console.trace();
+    }
+
+    window.onerror = function() {
+      console.log("Global Error");
+    }
+
   </script>
 </body>
 
